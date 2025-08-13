@@ -1,12 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "env": {
-    "RESEND_API_KEY": "@resend_api_key"
-  },
   "functions": {
     "app/api/send-email/route.ts": {
       "maxDuration": 10
