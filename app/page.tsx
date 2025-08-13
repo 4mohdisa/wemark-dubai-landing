@@ -561,7 +561,7 @@ export default function Home() {
             {/* Image */}
             <div className="relative">
               <img
-                src="https://images.pexels.com/photos/5922675/pexels-photo-5922675.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+                src="https://www.wemark.ae/founders.jpg"
                 alt="Wemark team collaborating in modern conference room discussing Dubai property investment opportunities"
                 className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                 loading="lazy"
@@ -615,7 +615,7 @@ export default function Home() {
                   href="https://wemark.com.au" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="btn-primary premium-button"
+                  className="btn-primary premium-button bg-navy hover:bg-gray-800"
                   onClick={() => {
                     if (typeof gtag !== 'undefined') {
                       gtag('event', 'click', {
@@ -673,7 +673,7 @@ export default function Home() {
                 <div className="text-center">
                   <div className="relative mb-6">
                     <img
-                      src="https://images.pexels.com/photos/33363536/pexels-photo-33363536.jpeg?auto=compress&cs=tinysrgb&w=400&h=400"
+                      src="https://www.wemark.ae/teams/Parm.png"
                       alt="Parm Singh, Principal and Founder of Wemark Real Estate Dubai"
                       className="w-32 h-32 rounded-full mx-auto object-cover shadow-lg"
                       loading="lazy"
@@ -804,7 +804,7 @@ export default function Home() {
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="text-center">
                   <img
-                    src="https://images.pexels.com/photos/8872492/pexels-photo-8872492.jpeg?auto=compress&cs=tinysrgb&w=300&h=300"
+                    src="https://www.wemark.ae/teams/Desiree.png"
                     alt="Desiree Janer, Office Manager and HR at Wemark Real Estate Dubai"
                     className="w-20 h-20 rounded-full mx-auto object-cover shadow-lg mb-4"
                     loading="lazy"
@@ -817,7 +817,7 @@ export default function Home() {
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="text-center">
                   <img
-                    src="https://images.pexels.com/photos/33331334/pexels-photo-33331334.jpeg?auto=compress&cs=tinysrgb&w=300&h=300"
+                    src="https://www.wemark.ae/teams/Sukrant.png"
                     alt="Sukrant Sandhu, Property Consultant at Wemark Real Estate Dubai"
                     className="w-20 h-20 rounded-full mx-auto object-cover shadow-lg mb-4"
                     loading="lazy"
