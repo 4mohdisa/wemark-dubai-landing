@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "app/api/send-email/route.ts": {
-      "maxDuration": 10
-    }
-  }
-}
