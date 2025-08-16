@@ -1,20 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
-  },
-  // Removed images: { unoptimized: true } for proper Vercel deployment
-  // https://github.com/vercel/next.js/issues/79588#issuecomment-2972850452
+  // Clean production build configuration
+  // Removed dangerous ignoreBuildErrors and ignoreDuringBuilds
+  
+  // Keep webpack optimizations for Vercel
   experimental: {
-    preloadEntriesOnStart: false,
     webpackMemoryOptimizations: true,
+  },
+  
+  // Optimize images for production
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+  
+  // Temporarily disable some ESLint rules for deployment
+  eslint: {
+    ignoreDuringBuilds: false,
   },
 }
 

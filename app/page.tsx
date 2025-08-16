@@ -37,7 +37,7 @@ export default function Home() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    console.log('Lead form submitted:', leadForm);
+    // Lead form submission
     
     try {
       const response = await fetch('/api/send-email', {
@@ -55,7 +55,7 @@ export default function Home() {
       const result = await response.json();
       
       if (response.ok) {
-        console.log('Lead form submission successful:', result);
+        // Lead form submission successful
         setSubmitted(true);
         
         // Google Analytics tracking
@@ -67,11 +67,11 @@ export default function Home() {
           });
         }
       } else {
-        console.error('Lead form submission failed:', result.error);
+        // Lead form submission failed
         alert('There was an error submitting your form. Please try again.');
       }
     } catch (error) {
-      console.error('Lead form submission error:', error);
+      // Lead form submission error
       alert('There was an error submitting your form. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -82,7 +82,7 @@ export default function Home() {
     e.preventDefault();
     setIsContactSubmitting(true);
     
-    console.log('Contact form submitted:', contactForm);
+    // Contact form submission
     
     try {
       const response = await fetch('/api/send-email', {
@@ -99,7 +99,7 @@ export default function Home() {
       const result = await response.json();
       
       if (response.ok) {
-        console.log('Contact form submission successful:', result);
+        // Contact form submission successful
         alert('Thank you! We will contact you within 2 hours.');
         
         // Reset form
@@ -114,11 +114,11 @@ export default function Home() {
           });
         }
       } else {
-        console.error('Contact form submission failed:', result.error);
+        // Contact form submission failed
         alert('There was an error submitting your form. Please try again.');
       }
     } catch (error) {
-      console.error('Contact form submission error:', error);
+      // Contact form submission error
       alert('There was an error submitting your form. Please try again.');
     } finally {
       setIsContactSubmitting(false);

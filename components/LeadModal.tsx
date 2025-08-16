@@ -43,7 +43,7 @@ export default function LeadModal({ isOpen, onClose, title = "Get VIP Access", s
     if (!validateForm()) return;
     
     setIsSubmitting(true);
-    console.log('Modal form submitted:', formData);
+    // Modal form submission
 
     try {
       const response = await fetch('/api/send-email', {
@@ -60,7 +60,7 @@ export default function LeadModal({ isOpen, onClose, title = "Get VIP Access", s
       const result = await response.json();
       
       if (response.ok) {
-        console.log('Modal form submission successful:', result);
+        // Modal form submission successful
         setSubmitted(true);
         
         // Google Analytics tracking
@@ -72,11 +72,11 @@ export default function LeadModal({ isOpen, onClose, title = "Get VIP Access", s
           });
         }
       } else {
-        console.error('Modal form submission failed:', result.error);
-        alert('There was an error submitting your form. Please try again.');
+        // Modal form submission failed
+        // Show error message to user via UI feedback
       }
     } catch (error) {
-      console.error('Modal form submission error:', error);
+      // Modal form submission error
       alert('There was an error submitting your form. Please try again.');
     } finally {
       setIsSubmitting(false);

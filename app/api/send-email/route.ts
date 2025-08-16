@@ -2,28 +2,28 @@ import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  console.log('Email API route called');
+  // Email API route called
   
   try {
     const { name, email, phone, message, formType } = await request.json();
     
     // Server-side validation
     if (!name || !email || !phone) {
-      console.log('Validation failed: missing required fields');
+      // Validation failed: missing required fields
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      console.log('Validation failed: invalid email format');
+      // Validation failed: invalid email format
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
     // Phone validation (basic)
     const phoneRegex = /^[\+]?[\d\s\-\(\)]+$/;
     if (!phoneRegex.test(phone)) {
-      console.log('Validation failed: invalid phone format');
+      // Validation failed: invalid phone format
       return NextResponse.json({ error: 'Invalid phone format' }, { status: 400 });
     }
 
@@ -37,12 +37,12 @@ export async function POST(request: NextRequest) {
       <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
     `;
 
-    console.log('Sending email via Resend...');
+    // Sending email via Resend...
     
     // Initialize Resend with API key check
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
-      console.error('RESEND_API_KEY environment variable is not set');
+      // RESEND_API_KEY environment variable is not set
       return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
     }
     
@@ -56,16 +56,16 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      console.error('Resend error:', error);
+      // Resend error occurred
       return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
     }
 
-    console.log('Email sent successfully:', data);
+    // Email sent successfully
 
     return NextResponse.json({ success: true, data });
     
   } catch (error) {
-    console.error('Email API error:', error);
+    // Email API error occurred
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
