@@ -282,10 +282,24 @@ export default function Home() {
           <div className="text-center mb-8">
             <p className="text-gray-600 font-semibold">Trusted Developer Partners</p>
           </div>
-          <div className="grid grid-cols-4 lg:grid-cols-8 gap-6 items-center justify-center opacity-70">
-            {['DAMAC', 'Emaar', 'Sobha', 'Binghatti', 'Meraas', 'Samana', 'Nakheel', 'Danube'].map((partner) => (
-              <div key={partner} className="bg-white rounded-lg p-4 shadow-sm text-center">
-                <span className="text-navy font-bold text-sm">{partner}</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 items-center justify-center opacity-80">
+            {[
+              { name: 'DAMAC', logo: 'https://www.wemark.ae/Developers_logo/DAMAC%20Properties.png' },
+              { name: 'Emaar', logo: 'https://www.wemark.ae/Developers_logo/Emaar%20Properties.png' },
+              { name: 'Sobha', logo: 'https://www.wemark.ae/Developers_logo/Sobha%20Realty.png' },
+              { name: 'Binghatti', logo: 'https://www.wemark.ae/Developers_logo/Binghatti.png' },
+              { name: 'Meraas', logo: 'https://www.wemark.ae/Developers_logo/Meraas.png' },
+              { name: 'Samana', logo: 'https://www.wemark.ae/Developers_logo/Samana%20Developers.png' },
+              { name: 'Nakheel', logo: 'https://www.wemark.ae/Developers_logo/Nakheel.png' },
+              { name: 'Danube', logo: 'https://www.wemark.ae/Developers_logo/Danube%20Properties.png' }
+            ].map((partner) => (
+              <div key={partner.name} className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center justify-center">
+                <img
+                  src={partner.logo}
+                  alt={`${partner.name} - Trusted Dubai property developer partner of Wemark Real Estate`}
+                  className="max-h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                  loading="lazy"
+                />
               </div>
             ))}
           </div>
@@ -1255,8 +1269,8 @@ export default function Home() {
                   <div className="flex items-center">
                     <Mail size={20} className="text-accent mr-3 flex-shrink-0" />
                     <div>
-                      <a href="mailto:australia@wemark.ae" className="font-semibold text-gray-900 hover:text-accent transition-colors">
-                        australia@wemark.ae
+                      <a href="mailto:we@wemark.com.au" className="font-semibold text-gray-900 hover:text-accent transition-colors">
+                        we@wemark.com.au
                       </a>
                       <p className="text-gray-600 text-sm">Australian Operations</p>
                     </div>
