@@ -15,9 +15,10 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   
-  // Temporarily disable some ESLint rules for deployment
+  // ESLint configuration for deployment
   eslint: {
     ignoreDuringBuilds: false,
+    dirs: ['app', 'components', 'lib'],
   },
 }
 

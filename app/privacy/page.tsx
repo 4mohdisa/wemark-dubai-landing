@@ -120,7 +120,7 @@ export default function PrivacyPolicy() {
 
             <h2 className={`text-3xl font-bold text-navy mb-6 ${merriweather.className} italic`}>Policy Updates</h2>
             <p className="text-gray-700 mb-8 leading-relaxed">
-              We may update this privacy policy from time to time. We will notify you of any significant changes by posting the new policy on our website and updating the "Last updated" date.
+              We may update this privacy policy from time to time. We will notify you of any significant changes by posting the new policy on our website and updating the &quot;Last updated&quot; date.
             </p>
 
           </div>

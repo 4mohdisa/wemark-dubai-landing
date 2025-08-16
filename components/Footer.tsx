@@ -27,7 +27,7 @@ export default function Footer() {
                 </div>
               </Link>
               <p className="text-gray-300 leading-relaxed" data-macaly="footer-description">
-                Dubai's premier luxury real estate company specializing in high-return property investments across Dubai's most exclusive locations.
+                Dubai&apos;s premier luxury real estate company specializing in high-return property investments across Dubai&apos;s most exclusive locations.
               </p>
             </div>
 
