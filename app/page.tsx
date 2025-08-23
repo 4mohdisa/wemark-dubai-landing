@@ -27,14 +27,45 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false);
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [leadErrors, setLeadErrors] = useState<{ [key: string]: string }>({});
+  const [contactErrors, setContactErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth';
   }, []);
 
+  const validateLeadForm = () => {
+    const newErrors: { [key: string]: string } = {};
+    
+    if (!leadForm.name.trim()) newErrors.name = 'Name is required';
+    if (!leadForm.email.trim()) newErrors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadForm.email)) newErrors.email = 'Invalid email format';
+    if (!leadForm.phone.trim()) newErrors.phone = 'Phone is required';
+    else if (!/^[\+]?[\d\s\-\(\)]+$/.test(leadForm.phone)) newErrors.phone = 'Invalid phone format';
+    
+    setLeadErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateContactForm = () => {
+    const newErrors: { [key: string]: string } = {};
+    
+    if (!contactForm.name.trim()) newErrors.name = 'Name is required';
+    if (!contactForm.email.trim()) newErrors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) newErrors.email = 'Invalid email format';
+    if (!contactForm.phone.trim()) newErrors.phone = 'Phone is required';
+    else if (!/^[\+]?[\d\s\-\(\)]+$/.test(contactForm.phone)) newErrors.phone = 'Invalid phone format';
+    if (!contactForm.message.trim()) newErrors.message = 'Message is required';
+    
+    setContactErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateLeadForm()) return;
+    
     setIsSubmitting(true);
     
     // Lead form submission
@@ -80,6 +111,9 @@ export default function Home() {
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateContactForm()) return;
+    
     setIsContactSubmitting(true);
     
     // Contact form submission
@@ -126,11 +160,11 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-screen bg-white ${roboto.className}`}>
-      <Navigation />
+    <div className={`min-h-screen bg-white overflow-x-hidden ${roboto.className}`}>
+      <Navigation onOpenModal={() => setIsModalOpen(true)} />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-24 pb-16">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
@@ -142,55 +176,42 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/70"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start lg:items-center">
             {/* Left Column - Headlines & Benefits */}
-            <div className="text-white">
-              <div className="mb-6">
-                <span className="inline-block bg-accent text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                  Dubai's #1 Luxury Real Estate
-                </span>
-              </div>
+            <div className="text-white order-1 mt-8 lg:mt-0">
 
-              <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight ${merriweather.className} italic`} data-macaly="hero-title">
-                Tax-Free Dubai Investments With 25% Returns
+              <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 lg:mb-6 leading-tight ${merriweather.className} italic`} data-macaly="hero-title">
+                Tax-Free Dubai Investments With High Returns
               </h1>
 
-              <p className="text-xl mb-8 text-gray-200 leading-relaxed" data-macaly="hero-subtitle">
+              <p className="text-lg sm:text-xl mb-6 lg:mb-8 text-gray-200 leading-relaxed" data-macaly="hero-subtitle">
                 Secure prime Dubai property before prices rise. Exclusive access to Dubai's most profitable investments.
               </p>
 
               {/* Key Benefits */}
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center">
-                  <CheckCircle size={24} className="text-accent mr-4 flex-shrink-0" />
-                  <span className="text-lg">Up to 25% ROI guaranteed on premium properties</span>
+              <div className="space-y-3 lg:space-y-4 mb-6 lg:mb-8">
+                <div className="flex items-start">
+                  <CheckCircle size={20} className="text-accent mr-3 flex-shrink-0 mt-0.5" />
+                  <span className="text-base lg:text-lg leading-relaxed">High returns on premium Dubai properties</span>
                 </div>
-                <div className="flex items-center">
-                  <CheckCircle size={24} className="text-accent mr-4 flex-shrink-0" />
-                  <span className="text-lg">Exclusive off-plan deals in Marina, Downtown & Palm</span>
+                <div className="flex items-start">
+                  <CheckCircle size={20} className="text-accent mr-3 flex-shrink-0 mt-0.5" />
+                  <span className="text-base lg:text-lg leading-relaxed">Exclusive off-plan deals in Marina, Downtown & Palm</span>
                 </div>
-                <div className="flex items-center">
-                  <CheckCircle size={24} className="text-accent mr-4 flex-shrink-0" />
-                  <span className="text-lg">Tax-free investment returns for international investors</span>
+                <div className="flex items-start">
+                  <CheckCircle size={20} className="text-accent mr-3 flex-shrink-0 mt-0.5" />
+                  <span className="text-base lg:text-lg leading-relaxed">Tax-free investment returns for international investors</span>
                 </div>
-                <div className="flex items-center">
-                  <CheckCircle size={24} className="text-accent mr-4 flex-shrink-0" />
-                  <span className="text-lg">500+ successful investments completed</span>
-                </div>
-              </div>
-
-              {/* Trust Element */}
-              <div className="mb-8">
-                <p className="text-sm text-gray-300 mb-2">Trusted by 500+ international investors</p>
-                <div className="text-yellow-400 text-lg">
-                  ★★★★★ <span className="text-white text-sm ml-2">4.9/5 rating • 127 reviews</span>
+                <div className="flex items-start">
+                  <CheckCircle size={20} className="text-accent mr-3 flex-shrink-0 mt-0.5" />
+                  <span className="text-base lg:text-lg leading-relaxed">Successful investments completed</span>
                 </div>
               </div>
             </div>
 
             {/* Right Column - Lead Form */}
-            <div className="bg-white/95 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="bg-white/95 backdrop-blur-lg rounded-3xl p-6 lg:p-8 shadow-2xl border border-white/20 order-2 mt-12 lg:mt-0 mb-8 lg:mb-0">
               <div className="text-center mb-6">
                 <h2 className={`text-2xl md:text-3xl font-bold text-navy mb-3 ${merriweather.className} italic`}>
                   Get VIP Access
@@ -208,10 +229,14 @@ export default function Home() {
                       placeholder="Enter your full name"
                       value={leadForm.name}
                       onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
-                      className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg"
+                      className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg ${
+                        leadErrors.name ? 'border-red-500' : 'border-gray-200'
+                      } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={isSubmitting}
                       required
                       data-macaly="lead-name-input"
                     />
+                    {leadErrors.name && <p className="text-red-500 text-sm mt-1">{leadErrors.name}</p>}
                   </div>
                   <div>
                     <input
@@ -219,10 +244,14 @@ export default function Home() {
                       placeholder="Enter your email address"
                       value={leadForm.email}
                       onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
-                      className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg"
+                      className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg ${
+                        leadErrors.email ? 'border-red-500' : 'border-gray-200'
+                      } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={isSubmitting}
                       required
                       data-macaly="lead-email-input"
                     />
+                    {leadErrors.email && <p className="text-red-500 text-sm mt-1">{leadErrors.email}</p>}
                   </div>
                   <div>
                     <input
@@ -230,15 +259,19 @@ export default function Home() {
                       placeholder="Enter your phone number"
                       value={leadForm.phone}
                       onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
-                      className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg"
+                      className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg ${
+                        leadErrors.phone ? 'border-red-500' : 'border-gray-200'
+                      } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={isSubmitting}
                       required
                       data-macaly="lead-phone-input"
                     />
+                    {leadErrors.phone && <p className="text-red-500 text-sm mt-1">{leadErrors.phone}</p>}
                   </div>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full btn-primary premium-button flex items-center justify-center"
+                    className="w-full btn-primary premium-button flex items-center justify-center bg-navy hover:bg-gray-800"
                   >
                     {isSubmitting ? (
                       <>
@@ -318,44 +351,6 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center p-8 bg-white rounded-2xl shadow-lg border border-gray-100">
-              <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Building size={32} className="text-accent" />
-              </div>
-              <div className="text-4xl font-bold text-navy mb-2" data-macaly="stat-properties">500+</div>
-              <div className="text-gray-600 font-semibold">Properties Sold</div>
-              <div className="text-sm text-gray-500 mt-2">Verified transactions</div>
-            </div>
-
-            <div className="text-center p-8 bg-white rounded-2xl shadow-lg border border-gray-100">
-              <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <TrendingUp size={32} className="text-green-600" />
-              </div>
-              <div className="text-4xl font-bold text-navy mb-2" data-macaly="stat-roi">25%</div>
-              <div className="text-gray-600 font-semibold">Average ROI</div>
-              <div className="text-sm text-gray-500 mt-2">Guaranteed returns</div>
-            </div>
-
-            <div className="text-center p-8 bg-white rounded-2xl shadow-lg border border-gray-100">
-              <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Award size={32} className="text-blue-600" />
-              </div>
-              <div className="text-4xl font-bold text-navy mb-2" data-macaly="stat-experience">15+</div>
-              <div className="text-gray-600 font-semibold">Years Experience</div>
-              <div className="text-sm text-gray-500 mt-2">Market expertise</div>
-            </div>
-
-            <div className="text-center p-8 bg-white rounded-2xl shadow-lg border border-gray-100">
-              <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Users size={32} className="text-purple-600" />
-              </div>
-              <div className="text-4xl font-bold text-navy mb-2" data-macaly="stat-advisors">50+</div>
-              <div className="text-gray-600 font-semibold">Expert Advisors</div>
-              <div className="text-sm text-gray-500 mt-2">Licensed professionals</div>
-            </div>
-          </div>
-
           {/* Key Benefits Grid */}
           <div className="grid lg:grid-cols-3 gap-8 mt-16">
             <div className="bg-light-gray rounded-2xl p-8">
@@ -370,9 +365,12 @@ export default function Home() {
                 <li>• Business Bay premium apartments</li>
               </ul>
               <div className="mt-6">
-                <a href="#contact" className="text-accent font-semibold hover:text-navy transition-colors">
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-accent font-semibold hover:text-navy transition-colors"
+                >
                   View Available Properties →
-                </a>
+                </button>
               </div>
             </div>
 
@@ -380,17 +378,20 @@ export default function Home() {
               <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-6">
                 <TrendingUp size={32} className="text-white" />
               </div>
-              <h3 className={`text-2xl font-bold text-navy mb-4 ${merriweather.className} italic`}>Guaranteed Returns</h3>
+              <h3 className={`text-2xl font-bold text-navy mb-4 ${merriweather.className} italic`}>Strong Growth Potential</h3>
               <ul className="space-y-3 text-gray-700">
-                <li>• Up to 25% ROI on investments</li>
+                <li>• High growth potential investments</li>
                 <li>• Flexible payment plans available</li>
-                <li>• Capital appreciation guarantee</li>
+                <li>• Capital appreciation opportunities</li>
                 <li>• Rental yield optimization</li>
               </ul>
               <div className="mt-6">
-                <a href="#contact" className="text-accent font-semibold hover:text-navy transition-colors">
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-accent font-semibold hover:text-navy transition-colors"
+                >
                   Calculate My Returns →
-                </a>
+                </button>
               </div>
             </div>
 
@@ -413,84 +414,6 @@ export default function Home() {
                   Get Expert Consultation →
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About/Stats Section */}
-      <section id="about" className="py-20 bg-light-gray">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className={`text-3xl md:text-5xl font-bold text-navy mb-6 ${merriweather.className} italic`} data-macaly="about-title">
-              Why Dubai Investors Choose Wemark
-            </h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto" data-macaly="about-subtitle">
-              Dubai's fastest-growing luxury real estate company with proven results
-            </p>
-          </div>
-
-          {/* Key Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            {[
-              { number: '500+', label: 'Properties Sold', icon: Building },
-              { number: '25%', label: 'Average ROI', icon: TrendingUp },
-              { number: '15+', label: 'Years Experience', icon: Award },
-              { number: '50+', label: 'Expert Advisors', icon: Users }
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="w-16 h-16 bg-navy rounded-full flex items-center justify-center mx-auto mb-4">
-                    <stat.icon size={28} className="text-white" />
-                  </div>
-                  <div className={`text-3xl font-bold text-navy mb-2 ${merriweather.className}`} data-macaly={`stat-${index}-number`}>
-                    {stat.number}
-                  </div>
-                  <p className="text-gray-600 font-medium" data-macaly={`stat-${index}-label`}>{stat.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Key Benefits Grid */}
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
-                <Building size={36} className="text-white" />
-              </div>
-              <h3 className={`text-2xl font-bold text-navy mb-4 ${merriweather.className} italic`}>Prime Locations Only</h3>
-              <ul className="text-gray-700 space-y-2 text-left max-w-sm mx-auto">
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Dubai Marina waterfront towers</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Downtown luxury residences</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Palm Jumeirah exclusive villas</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Business Bay premium apartments</li>
-              </ul>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-navy rounded-full flex items-center justify-center mx-auto mb-6">
-                <TrendingUp size={36} className="text-white" />
-              </div>
-              <h3 className={`text-2xl font-bold text-navy mb-4 ${merriweather.className} italic`}>Guaranteed Returns</h3>
-              <ul className="text-gray-700 space-y-2 text-left max-w-sm mx-auto">
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Up to 25% ROI on investments</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Flexible payment plans available</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Capital appreciation guarantee</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Rental yield optimization</li>
-              </ul>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
-                <Award size={36} className="text-white" />
-              </div>
-              <h3 className={`text-2xl font-bold text-navy mb-4 ${merriweather.className} italic`}>Expert Support</h3>
-              <ul className="text-gray-700 space-y-2 text-left max-w-sm mx-auto">
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Dedicated investment advisor</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Legal & financing assistance</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />Property management services</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" />24/7 investor support</li>
-              </ul>
             </div>
           </div>
         </div>
@@ -520,7 +443,7 @@ export default function Home() {
                 Get early access to Dubai's newest developments at pre-launch prices
               </p>
               <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Up to 30% below market value</li>
+                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Below market value pricing</li>
                 <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Flexible payment plans (1-5% down)</li>
                 <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Capital appreciation during construction</li>
                 <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Premium developers: DAMAC, Emaar, Sobha</li>
@@ -539,7 +462,7 @@ export default function Home() {
               <ul className="space-y-3 text-gray-700">
                 <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Instant rental income generation</li>
                 <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Fully furnished luxury units</li>
-                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />8-12% annual rental yields</li>
+                <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Strong annual rental yields</li>
                 <li className="flex items-start"><CheckCircle className="w-5 h-5 text-accent mr-3 mt-0.5 flex-shrink-0" />Complete property management</li>
               </ul>
             </div>
@@ -549,9 +472,23 @@ export default function Home() {
           <div className="text-center">
             <h3 className={`text-2xl font-bold text-navy mb-8 ${merriweather.className} italic`}>Exclusive Developer Partners</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
-              {['DAMAC', 'Emaar', 'Sobha', 'Binghatti', 'Meraas', 'Samana', 'Nakheel', 'Danube'].map((partner, index) => (
-                <div key={index} className="bg-white border-2 border-gray-100 rounded-xl p-4 hover:border-accent transition-colors">
-                  <span className={`text-navy font-bold ${merriweather.className}`} data-macaly={`partner-${index}`}>{partner}</span>
+              {[
+                { name: 'DAMAC', logo: 'https://www.wemark.ae/Developers_logo/DAMAC%20Properties.png' },
+                { name: 'Emaar', logo: 'https://www.wemark.ae/Developers_logo/Emaar%20Properties.png' },
+                { name: 'Sobha', logo: 'https://www.wemark.ae/Developers_logo/Sobha%20Realty.png' },
+                { name: 'Binghatti', logo: 'https://www.wemark.ae/Developers_logo/Binghatti.png' },
+                { name: 'Meraas', logo: 'https://www.wemark.ae/Developers_logo/Meraas.png' },
+                { name: 'Samana', logo: 'https://www.wemark.ae/Developers_logo/Samana%20Developers.png' },
+                { name: 'Nakheel', logo: 'https://www.wemark.ae/Developers_logo/Nakheel.png' },
+                { name: 'Danube', logo: 'https://www.wemark.ae/Developers_logo/Danube%20Properties.png' }
+              ].map((partner, index) => (
+                <div key={index} className="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-accent transition-colors flex items-center justify-center">
+                  <img 
+                    src={partner.logo} 
+                    alt={`${partner.name} logo`}
+                    className="w-20 h-12 object-contain"
+                    data-macaly={`partner-${index}`}
+                  />
                 </div>
               ))}
             </div>
@@ -580,9 +517,7 @@ export default function Home() {
                 className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                 loading="lazy"
               />
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-accent rounded-full flex items-center justify-center shadow-xl">
-                <span className="text-white font-bold text-lg">15+</span>
-              </div>
+                
             </div>
 
             {/* Content */}
@@ -610,16 +545,16 @@ export default function Home() {
               {/* Key Stats */}
               <div className="grid grid-cols-3 gap-4 py-6 border-t border-b border-gray-200">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-accent">500+</div>
+                  <div className="text-2xl font-bold text-accent">Many</div>
                   <div className="text-sm text-gray-600">Happy Clients</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-accent">25%</div>
-                  <div className="text-sm text-gray-600">Avg ROI</div>
+                  <div className="text-2xl font-bold text-accent">High</div>
+                  <div className="text-sm text-gray-600">Growth Focus</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-accent">15+</div>
-                  <div className="text-sm text-gray-600">Years Experience</div>
+                  <div className="text-2xl font-bold text-accent">Extensive</div>
+                  <div className="text-sm text-gray-600">Experience</div>
                 </div>
               </div>
 
@@ -661,264 +596,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Our Team Section */}
-      <section className="py-20" id="team">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className={`text-4xl md:text-5xl font-bold text-navy mb-6 ${merriweather.className} italic`}>
-              Our Team
-            </h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              Meet the dedicated professionals behind Wemark's success in Dubai's luxury real estate market
-            </p>
-          </div>
-
-          {/* Principals */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h3 className={`text-2xl font-bold text-navy mb-2 ${merriweather.className} italic`}>Principals</h3>
-              <div className="w-16 h-1 bg-accent mx-auto"></div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-105 transition-all duration-300">
-                <div className="text-center">
-                  <div className="relative mb-6">
-                    <img
-                      src="https://www.wemark.ae/teams/Parm.png"
-                      alt="Parm Singh, Principal and Founder of Wemark Real Estate Dubai"
-                      className="w-32 h-32 rounded-full mx-auto object-cover shadow-lg"
-                      loading="lazy"
-                    />
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center">
-                      <Star size={16} className="text-white" />
-                    </div>
-                  </div>
-                  <h4 className="text-xl font-bold text-navy mb-2">Parm Singh</h4>
-                  <p className="text-accent font-semibold mb-4">Principal & Founder</p>
-                  <p className="text-gray-700 text-sm leading-relaxed mb-6">
-                    Leading our team with vision and expertise, driving excellence in real estate services across Australia and Dubai.
-                  </p>
-                  <div className="flex justify-center space-x-4">
-                    <a href="mailto:parm@wemark.ae" className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition-all">
-                      <Mail size={16} />
-                    </a>
-                    <a href="#" className="w-10 h-10 bg-blue-600/10 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
-                      <Users size={16} />
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-105 transition-all duration-300">
-                <div className="text-center">
-                  <div className="relative mb-6">
-                    <img
-                      src="https://www.wemark.ae/teams/kamal.png"
-                      alt="Kamal Singh, Director Dubai of Wemark Real Estate"
-                      className="w-32 h-32 rounded-full mx-auto object-cover shadow-lg"
-                      loading="lazy"
-                    />
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center">
-                      <Award size={16} className="text-white" />
-                    </div>
-                  </div>
-                  <h4 className="text-xl font-bold text-navy mb-2">Kamal Singh</h4>
-                  <p className="text-accent font-semibold mb-4">Director (Dubai)</p>
-                  <p className="text-gray-700 text-sm leading-relaxed mb-6">
-                    Leading our team with vision and expertise, driving excellence in real estate services across Australia and Dubai.
-                  </p>
-                  <div className="flex justify-center space-x-4">
-                    <a href="mailto:kamal@wemark.ae" className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition-all">
-                      <Mail size={16} />
-                    </a>
-                    <a href="#" className="w-10 h-10 bg-blue-600/10 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
-                      <Users size={16} />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Banner after Principals */}
-            <div className="mt-12 bg-light-gray rounded-2xl p-6 text-center border border-gray-100">
-              <p className="text-gray-700 mb-4 font-semibold">
-                Want to work with our expert leadership team? Book a free consultation today.
-              </p>
-              <a 
-                href="#contact" 
-                className="inline-flex items-center bg-accent text-white px-8 py-3 rounded-xl font-semibold hover:bg-navy transition-all"
-              >
-                Get VIP Access
-                <ChevronDown size={16} className="ml-2 rotate-[-90deg]" />
-              </a>
-            </div>
-          </div>
-
-          {/* Australia Team */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h3 className={`text-2xl font-bold text-navy mb-2 ${merriweather.className} italic`}>Australia Team</h3>
-              <div className="w-16 h-1 bg-accent mx-auto"></div>
-            </div>
-
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[
-                { name: "Chirag Chavda", title: "Sales Manager", image: "https://www.wemark.ae/teams/chirag.png" },
-                { name: "Satwinder Kaur", title: "Property Consultant", image: "https://www.wemark.ae/teams/satwinder.png" },
-                { name: "Sunraj Singh", title: "Property Consultant", image: "https://www.wemark.ae/teams/sunraj.png" },
-                { name: "Ravin Amingad", title: "Property Consultant", image: "https://www.wemark.ae/teams/ravin.jpg" },
-                { name: "Mohammed Isa", title: "Property Consultant", image: "https://www.wemark.ae/teams/Mohammed.png" },
-                { name: "Yazdan Shah", title: "Property Consultant", image: "https://www.wemark.ae/teams/Yazdan.png" },
-                { name: "Faith Figueroa", title: "Administration Assistant", image: "https://www.wemark.ae/teams/Faith.png" },
-                { name: "Sukhpreet Bala", title: "Property Consultant", image: "https://www.wemark.ae/teams/Sukhpreet.png" },
-                { name: "Christene Pineda", title: "Administration Assistant", image: "https://www.wemark.ae/teams/Christene.png" },
-                { name: "Gundeep Singh", title: "Property Consultant", image: "https://www.wemark.ae/teams/gundeep.png" },
-              ].map((member, index) => (
-                <div key={index} className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-105 transition-all duration-300">
-                  <div className="text-center">
-                    <img
-                      src={member.image}
-                      alt={`${member.name}, ${member.title} at Wemark Real Estate Australia`}
-                      className="w-20 h-20 rounded-full mx-auto object-cover shadow-lg mb-4"
-                      loading="lazy"
-                    />
-                    <h4 className="text-lg font-bold text-navy mb-1">{member.name}</h4>
-                    <p className="text-accent font-medium text-sm">{member.title}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA Banner after Australia Team */}
-            <div className="mt-12 bg-light-gray rounded-2xl p-6 text-center border border-gray-100">
-              <p className="text-gray-700 mb-4 font-semibold">
-                Want to work with our expert Australia team? Book a free consultation today.
-              </p>
-              <a 
-                href="#contact" 
-                className="inline-flex items-center bg-accent text-white px-8 py-3 rounded-xl font-semibold hover:bg-navy transition-all"
-              >
-                Get VIP Access
-                <ChevronDown size={16} className="ml-2 rotate-[-90deg]" />
-              </a>
-            </div>
-          </div>
-
-          {/* Dubai Team */}
-          <div className="mb-12">
-            <div className="text-center mb-8">
-              <h3 className={`text-2xl font-bold text-navy mb-2 ${merriweather.className} italic`}>Dubai Team</h3>
-              <div className="w-16 h-1 bg-accent mx-auto"></div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-105 transition-all duration-300">
-                <div className="text-center">
-                  <img
-                    src="https://www.wemark.ae/teams/Desiree.png"
-                    alt="Desiree Janer, Office Manager and HR at Wemark Real Estate Dubai"
-                    className="w-20 h-20 rounded-full mx-auto object-cover shadow-lg mb-4"
-                    loading="lazy"
-                  />
-                  <h4 className="text-lg font-bold text-navy mb-1">Desiree Janer</h4>
-                  <p className="text-accent font-medium text-sm">Office Manager/HR</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-105 transition-all duration-300">
-                <div className="text-center">
-                  <img
-                    src="https://www.wemark.ae/teams/Sukrant.png"
-                    alt="Sukrant Sandhu, Property Consultant at Wemark Real Estate Dubai"
-                    className="w-20 h-20 rounded-full mx-auto object-cover shadow-lg mb-4"
-                    loading="lazy"
-                  />
-                  <h4 className="text-lg font-bold text-navy mb-1">Sukrant Sandhu</h4>
-                  <p className="text-accent font-medium text-sm">Property Consultant</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Final CTA Banner after Dubai Team */}
-            <div className="mt-12 bg-gradient-to-r from-accent to-navy rounded-2xl p-8 text-center text-white">
-              <h4 className={`text-2xl font-bold mb-4 ${merriweather.className} italic`}>
-                Ready to Work With Dubai's Best?
-              </h4>
-              <p className="text-blue-100 mb-6 text-lg">
-                Our expert team is standing by to help you secure your Dubai property investment today.
-              </p>
-              <a 
-                href="#contact" 
-                className="inline-flex items-center bg-white text-navy px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-lg"
-              >
-                🚀 Get VIP Access Now
-              </a>
-            </div>
-          </div>
-
-          {/* Team Stats */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div>
-                <div className="text-3xl font-bold text-accent mb-2">15</div>
-                <div className="text-gray-700 font-semibold">Team Members</div>
-                <div className="text-sm text-gray-500">Across 2 Countries</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-accent mb-2">50+</div>
-                <div className="text-gray-700 font-semibold">Years Combined</div>
-                <div className="text-sm text-gray-500">Industry Experience</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-accent mb-2">500+</div>
-                <div className="text-gray-700 font-semibold">Happy Clients</div>
-                <div className="text-sm text-gray-500">Satisfied Investors</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-accent mb-2">24/7</div>
-                <div className="text-gray-700 font-semibold">Support</div>
-                <div className="text-sm text-gray-500">Always Available</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Structured Data for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
-              {
-                "@context": "https://schema.org",
-                "@type": "Person",
-                "name": "Parm Singh",
-                "jobTitle": "Principal & Founder",
-                "worksFor": {
-                  "@type": "Organization",
-                  "name": "Wemark Real Estate"
-                },
-                "email": "parm@wemark.ae",
-                "image": "https://images.pexels.com/photos/33363536/pexels-photo-33363536.jpeg"
-              },
-              {
-                "@context": "https://schema.org",
-                "@type": "Person",
-                "name": "Kamal Singh",
-                "jobTitle": "Director (Dubai)",
-                "worksFor": {
-                  "@type": "Organization",
-                  "name": "Wemark Real Estate"
-                },
-                "email": "kamal@wemark.ae",
-                "image": "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg"
-              }
-            ])
-          }}
-        />
-      </section>
+      </section>      
 
       {/* Testimonials Section */}
       <section className="py-20" id="testimonials">
@@ -943,12 +621,12 @@ export default function Home() {
                   <div className="flex text-yellow-400">
                     {'★'.repeat(5)}
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">22% ROI in 18 months</div>
+                  <div className="text-sm text-gray-500 mt-1">Excellent Returns</div>
                 </div>
               </div>
               
               <blockquote className="text-gray-700 mb-6 leading-relaxed italic">
-                "Wemark delivered exceptional results on our Downtown Dubai investment. 22% ROI in just 18 months. 
+                "Wemark delivered exceptional results on our Downtown Dubai investment. Excellent returns achieved ahead of schedule. 
                 Professional, transparent, and highly recommended for serious property investors."
               </blockquote>
               
@@ -969,12 +647,12 @@ export default function Home() {
                   <div className="flex text-yellow-400">
                     {'★'.repeat(5)}
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">28% Capital Appreciation</div>
+                  <div className="text-sm text-gray-500 mt-1">Strong Capital Growth</div>
                 </div>
               </div>
               
               <blockquote className="text-gray-700 mb-6 leading-relaxed italic">
-                "Outstanding service and market insight. Our Palm Jumeirah villa exceeded all expectations with 28% 
+                "Outstanding service and market insight. Our Palm Jumeirah villa exceeded all expectations with strong 
                 capital appreciation. Best investment decision we ever made."
               </blockquote>
               
@@ -995,13 +673,13 @@ export default function Home() {
                   <div className="flex text-yellow-400">
                     {'★'.repeat(5)}
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">15% Annual Rental Yield</div>
+                  <div className="text-sm text-gray-500 mt-1">Strong Rental Yield</div>
                 </div>
               </div>
               
               <blockquote className="text-gray-700 mb-6 leading-relaxed italic">
                 "Wemark's expertise in Dubai's market is unmatched. They guided us to the perfect off-plan opportunity. 
-                Now earning 15% rental yield annually with excellent property management."
+                Now earning strong rental yields annually with excellent property management."
               </blockquote>
               
               <div className="border-t pt-4">
@@ -1017,18 +695,18 @@ export default function Home() {
             <div className="inline-flex items-center bg-white rounded-2xl p-6 shadow-lg">
               <div className="flex items-center space-x-8">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-accent">4.9/5</div>
-                  <div className="text-sm text-gray-600">Average Rating</div>
+                  <div className="text-3xl font-bold text-accent">★★★★★</div>
+                  <div className="text-sm text-gray-600">Top Rated</div>
                 </div>
                 <div className="h-8 w-px bg-gray-200"></div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-accent">500+</div>
+                  <div className="text-3xl font-bold text-accent">Many</div>
                   <div className="text-sm text-gray-600">Happy Clients</div>
                 </div>
                 <div className="h-8 w-px bg-gray-200"></div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-accent">127</div>
-                  <div className="text-sm text-gray-600">5-Star Reviews</div>
+                  <div className="text-3xl font-bold text-accent">★★★★★</div>
+                  <div className="text-sm text-gray-600">Reviews</div>
                 </div>
               </div>
             </div>
@@ -1036,13 +714,13 @@ export default function Home() {
 
           {/* CTA After Testimonials */}
           <div className="mt-12 text-center">
-            <a 
-              href="#contact" 
+            <button 
+              onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center bg-accent text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-navy transition-all shadow-lg"
             >
               Join Our Success Stories
               <ChevronDown size={20} className="ml-2 rotate-[-90deg]" />
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -1057,7 +735,7 @@ export default function Home() {
                 Ready to Start Investing?
               </h3>
               <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-                Join hundreds of Australians securing high-ROI Dubai investments with our expert team
+                Join many Australians securing profitable Dubai investments with our expert team
               </p>
             </div>
 
@@ -1069,9 +747,13 @@ export default function Home() {
                     placeholder="Enter your full name"
                     value={leadForm.name}
                     onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
-                    className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg"
+                    className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg ${
+                      leadErrors.name ? 'border-red-500' : 'border-gray-200'
+                    } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isSubmitting}
                     required
                   />
+                  {leadErrors.name && <p className="text-red-500 text-sm mt-1">{leadErrors.name}</p>}
                 </div>
                 <div>
                   <input
@@ -1079,9 +761,13 @@ export default function Home() {
                     placeholder="Enter your email address"
                     value={leadForm.email}
                     onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
-                    className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg"
+                    className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg ${
+                      leadErrors.email ? 'border-red-500' : 'border-gray-200'
+                    } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isSubmitting}
                     required
                   />
+                  {leadErrors.email && <p className="text-red-500 text-sm mt-1">{leadErrors.email}</p>}
                 </div>
                 <div>
                   <input
@@ -1089,14 +775,18 @@ export default function Home() {
                     placeholder="Enter your phone number"
                     value={leadForm.phone}
                     onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
-                    className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg"
+                    className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none text-lg ${
+                      leadErrors.phone ? 'border-red-500' : 'border-gray-200'
+                    } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isSubmitting}
                     required
                   />
+                  {leadErrors.phone && <p className="text-red-500 text-sm mt-1">{leadErrors.phone}</p>}
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full btn-primary premium-button flex items-center justify-center"
+                  className="w-full btn-primary premium-button flex items-center justify-center bg-navy hover:bg-gray-800"
                 >
                   {isSubmitting ? (
                     <>
@@ -1133,16 +823,16 @@ export default function Home() {
             Your Dubai Investment Journey Starts Here
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Join hundreds of Australians securing high-ROI Dubai investments with our expert team
+            Join many Australians securing profitable Dubai investments with our expert team
           </p>
 
           {/* Key Highlights */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <TrendingUp size={32} className="text-accent mx-auto mb-3" />
-              <div className="text-3xl font-bold text-accent mb-2">25%</div>
-              <div className="text-white font-semibold">Average ROI</div>
-              <div className="text-gray-400 text-sm">Tax-Free Returns</div>
+              <div className="text-3xl font-bold text-accent mb-2">High</div>
+              <div className="text-white font-semibold">Growth Potential</div>
+              <div className="text-gray-400 text-sm">Premium Properties</div>
             </div>
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <Shield size={32} className="text-accent mx-auto mb-3" />
@@ -1160,7 +850,7 @@ export default function Home() {
 
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="btn-primary premium-button text-xl px-12 py-5 shadow-2xl bg-white text-black hover:bg-gray-100"
+            className="btn-primary premium-button text-xl px-12 py-5 shadow-2xl bg-navy hover:bg-white hover:text-navy"
           >
             🚀 Secure My Dubai Investment Now
           </button>
@@ -1212,7 +902,7 @@ export default function Home() {
                   <div className="flex items-start">
                     <MapPin size={20} className="text-accent mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="font-semibold text-gray-900">OF401 - 50, Bardab - Mankhool, Dubai, UAE</p>
+                      <p className="font-semibold text-gray-900">Park Lane Tower 615, Business Bay, Dubai, United Arab Emirates</p>
                       <p className="text-gray-600 text-sm">Prime Business District Location</p>
                     </div>
                   </div>
@@ -1228,8 +918,8 @@ export default function Home() {
                   <div className="flex items-center">
                     <Mail size={20} className="text-accent mr-3 flex-shrink-0" />
                     <div>
-                      <a href="mailto:dubai@wemark.ae" className="font-semibold text-gray-900 hover:text-accent transition-colors">
-                        dubai@wemark.ae
+                      <a href="mailto:dubai@wemark.com.au" className="font-semibold text-gray-900 hover:text-accent transition-colors">
+                        dubai@wemark.com.au
                       </a>
                       <p className="text-gray-600 text-sm">Investment Inquiries</p>
                     </div>
@@ -1292,53 +982,65 @@ export default function Home() {
 
               <form onSubmit={handleContactSubmit} className="space-y-6" suppressHydrationWarning={true}>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Your full name"
-                    value={contactForm.name}
-                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                    className={`w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none ${
-                      isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                    disabled={isContactSubmitting}
-                    required
-                  />
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    value={contactForm.email}
-                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                    className={`w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none ${
-                      isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                    disabled={isContactSubmitting}
-                    required
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Your full name"
+                      value={contactForm.name}
+                      onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                      className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none ${
+                        contactErrors.name ? 'border-red-500' : 'border-gray-200'
+                      } ${isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={isContactSubmitting}
+                      required
+                    />
+                    {contactErrors.name && <p className="text-red-500 text-sm mt-1">{contactErrors.name}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="email"
+                      placeholder="Your email address"
+                      value={contactForm.email}
+                      onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                      className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none ${
+                        contactErrors.email ? 'border-red-500' : 'border-gray-200'
+                      } ${isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={isContactSubmitting}
+                      required
+                    />
+                    {contactErrors.email && <p className="text-red-500 text-sm mt-1">{contactErrors.email}</p>}
+                  </div>
                 </div>
                 
-                <input
-                  type="tel"
-                  placeholder="Your phone number"
-                  value={contactForm.phone}
-                  onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                  className={`w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none ${
-                    isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                  disabled={isContactSubmitting}
-                  required
-                />
+                <div>
+                  <input
+                    type="tel"
+                    placeholder="Your phone number"
+                    value={contactForm.phone}
+                    onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                    className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none ${
+                      contactErrors.phone ? 'border-red-500' : 'border-gray-200'
+                    } ${isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isContactSubmitting}
+                    required
+                  />
+                  {contactErrors.phone && <p className="text-red-500 text-sm mt-1">{contactErrors.phone}</p>}
+                </div>
                 
-                <textarea
-                  placeholder="Tell us about your investment goals and budget range..."
-                  rows={4}
-                  value={contactForm.message}
-                  onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                  className={`w-full px-4 py-4 border border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none resize-none ${
-                    isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                  disabled={isContactSubmitting}
-                  required
-                />
+                <div>
+                  <textarea
+                    placeholder="Tell us about your investment goals and budget range..."
+                    rows={4}
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                    className={`w-full px-4 py-4 border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none resize-none ${
+                      contactErrors.message ? 'border-red-500' : 'border-gray-200'
+                    } ${isContactSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isContactSubmitting}
+                    required
+                  />
+                  {contactErrors.message && <p className="text-red-500 text-sm mt-1">{contactErrors.message}</p>}
+                </div>
                 
                 <button
                   type="submit"
@@ -1369,7 +1071,13 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
+      <Footer onOpenModal={() => setIsModalOpen(true)} />
+      
+      {/* Lead Modal */}
+      <LeadModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 }

@@ -28,12 +28,13 @@ export async function POST(request: NextRequest) {
     }
 
     const emailContent = `
-      <h2>New ${formType || 'Lead'} Form Submission - Wemark Dubai</h2>
+      <h2>New ${formType || 'Lead'} Form Submission - dubaipropertyinvestors.com.au</h2>
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Phone:</strong> ${phone}</p>
       ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
       <p><strong>Form Type:</strong> ${formType || 'General Lead'}</p>
+      <p><strong>Source:</strong> dubaipropertyinvestors.com.au</p>
       <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
     `;
 
@@ -49,9 +50,9 @@ export async function POST(request: NextRequest) {
     const resend = new Resend(apiKey);
     
     const { data, error } = await resend.emails.send({
-      from: 'leads@wemark.ae',
-      to: ['dubai@wemark.ae'],
-      subject: `New ${formType || 'Lead'} - ${name}`,
+      from: 'leads@dubaipropertyinvestors.com.au',
+      to: ['mohdisa233@gmail.com'],
+      subject: `dubaipropertyinvestors.com.au - New ${formType || 'Lead'} from ${name}`,
       html: emailContent,
     });
 

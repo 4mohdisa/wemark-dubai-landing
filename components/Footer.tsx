@@ -8,7 +8,11 @@ const merriweather = Merriweather({
   style: ['normal', 'italic'],
 });
 
-export default function Footer() {
+interface FooterProps {
+  onOpenModal?: () => void;
+}
+
+export default function Footer({ onOpenModal }: FooterProps) {
   return (
     <>
       {/* Footer */}
@@ -72,9 +76,12 @@ export default function Footer() {
 
       {/* Mobile Sticky CTA */}
       <div className="fixed bottom-4 left-4 right-4 md:hidden z-50">
-        <Link href="/#contact" className="block w-full bg-navy text-white px-6 py-4 rounded-xl font-semibold text-lg shadow-2xl backdrop-blur-sm border border-gray-700 hover:bg-gray-800 transition-colors text-center">
+        <button 
+          onClick={onOpenModal}
+          className="block w-full bg-navy text-white px-6 py-4 rounded-xl font-semibold text-lg shadow-2xl backdrop-blur-sm border border-gray-700 hover:bg-gray-800 transition-colors text-center"
+        >
           🚀 Get VIP Property Access
-        </Link>
+        </button>
       </div>
     </>
   );

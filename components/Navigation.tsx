@@ -12,11 +12,22 @@ const merriweather = Merriweather({
   style: ['normal', 'italic'],
 });
 
-export default function Navigation() {
+interface NavigationProps {
+  onOpenModal?: () => void;
+}
+
+export default function Navigation({ onOpenModal }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleNavClick = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleVIPClick = () => {
+    setIsMenuOpen(false);
+    if (onOpenModal) {
+      onOpenModal();
+    }
   };
 
   return (
@@ -39,7 +50,7 @@ export default function Navigation() {
             <Link href="/#about" className="text-navy hover:text-accent transition-colors font-medium">Properties</Link>
             <Link href="/#services" className="text-navy hover:text-accent transition-colors font-medium">Investment</Link>
             <Link href="/#testimonials" className="text-navy hover:text-accent transition-colors font-medium">Success Stories</Link>
-            <Link href="/#contact" className="bg-navy text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-all font-semibold">Get VIP Access</Link>
+            <button onClick={handleVIPClick} className="bg-navy text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-all font-semibold">Get VIP Access</button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -59,7 +70,7 @@ export default function Navigation() {
                 <Link href="/#about" onClick={handleNavClick} className="text-navy hover:text-accent transition-colors font-medium">Properties</Link>
                 <Link href="/#services" onClick={handleNavClick} className="text-navy hover:text-accent transition-colors font-medium">Investment</Link>
                 <Link href="/#testimonials" onClick={handleNavClick} className="text-navy hover:text-accent transition-colors font-medium">Success Stories</Link>
-                <Link href="/#contact" onClick={handleNavClick} className="bg-navy text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-all inline-block text-center font-semibold">Get VIP Access</Link>
+                <button onClick={handleVIPClick} className="bg-navy text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-all text-center font-semibold">Get VIP Access</button>
               </div>
             </div>
           </div>
